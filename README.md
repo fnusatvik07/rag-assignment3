@@ -84,18 +84,59 @@ The image below (from the LangGraph tutorial) shows the baseline agentic RAG gra
 
 ### 3.1 Target Architecture: Full Agentic RAG Pipeline
 
-Below is the **target architecture** you must implement, generated using the [AWS Diagram MCP Server](https://awslabs.github.io/mcp/servers/aws-diagram-mcp-server). As a bonus, candidates are required to recreate or extend this using the same tool (see Bonus Section 6.5).
-
 ![Agentic RAG Architecture](./diagrams/architecture.png)
 
 **Colour legend:**
-- 🔴 Red border — Semantic Cache layer
-- 🔵 Blue border — Adaptive RAG / Query Router
-- 🟢 Green border — Corrective RAG (retrieval, grading, rewrite, fallback)
-- 🟡 Yellow border — Self-RAG (generation + reflection loops)
-- 🟣 Purple border — Direct LLM path (no retrieval)
+- 🔴 Red — Semantic Cache layer
+- 🔵 Blue — Adaptive RAG / Query Router
+- 🟢 Green — Corrective RAG (retrieve, grade, rewrite, fallback)
+- 🟡 Yellow — Self-RAG (generate + reflect)
+- 🟣 Purple — Direct LLM path (no retrieval)
 
-### 3.2 Node Descriptions
+### 3.2 Flow Overview (Mermaid)
+
+```mermaid
+flowchart TD
+    U([User Query]) --> C{Semantic Cache}
+    C -->|HIT| OUT([Final Answer + Citations])
+    C -->|MISS| R{Adaptive Router}
+
+    R -->|simple / factual| LD[LLM Direct]
+    R -->|domain question| RET[Retrieve Top-K]
+    R -->|current events| WS[Web Search]
+
+    CORPUS[(Document Corpus)] -.->|index| VS[(Vector Store)]
+    VS -.-> RET
+
+    RET --> GD{Grade Docs}
+    GD -->|relevant| GEN[Generate Answer]
+    GD -->|irrelevant| RW[Query Rewriter]
+    RW -->|retry| RET
+    RW -->|max retries| FB[Fallback\nLLM / Web]
+    FB --> GEN
+    WS --> GEN
+
+    GEN --> HC{Hallucination\nGrader}
+    HC -->|grounded| QC{Answer Quality\nGrader}
+    HC -->|hallucinated| RET
+    QC -->|useful| OUT
+    QC -->|not useful| GEN
+
+    LD --> OUT
+
+    style C fill:#FADBD8,stroke:#E74C3C
+    style R fill:#D6EAF8,stroke:#2E86C1
+    style GD fill:#D5F5E3,stroke:#1E8449
+    style RW fill:#D5F5E3,stroke:#1E8449
+    style RET fill:#D5F5E3,stroke:#1E8449
+    style GEN fill:#FEF9E7,stroke:#B7950B
+    style HC fill:#FEF9E7,stroke:#B7950B
+    style QC fill:#FEF9E7,stroke:#B7950B
+    style LD fill:#F4ECF7,stroke:#7D3C98
+    style OUT fill:#EAEDED,stroke:#555
+```
+
+### 3.3 Node Descriptions
 
 | Node | Responsibility | RAG Type |
 |---|---|---|
