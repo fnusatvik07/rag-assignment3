@@ -1,21 +1,20 @@
-# Assignment 3 — Agentic RAG
+# Assignment 3 - Agentic RAG
 
 **Course:** RAG Architect 2026 &nbsp;|&nbsp; **Due:** March 22, 2026, 11:59 PM &nbsp;|&nbsp; **Points:** 200 base + 60 bonus
 
-Build a RAG system that thinks for itself — it decides whether to retrieve, checks if retrieved docs are useful, and reflects on its own answers before returning them.
+## Overview
 
+Standard RAG pipelines retrieve documents and blindly pass them to an LLM — they don't check if the docs are relevant, don't know when to skip retrieval entirely, and don't fix bad answers. Your task is to build a smarter, agentic version that combines three techniques: **Adaptive RAG** (route each query to the right source), **Corrective RAG** (grade and fix bad retrievals), and **Self-RAG** (reflect on and retry poor answers). Use any framework — LangGraph, LlamaIndex, custom Python, anything.
+
+Reference to study (not copy): [LangGraph Agentic RAG Tutorial](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_agentic_rag/)
 
 ## What to Build
 
-You are implementing three techniques on top of a standard RAG pipeline:
-
 | Layer | What it does |
 |---|---|
-| **Adaptive RAG** | Routes each query to the right tier — LLM direct, vector store, or web search |
+| **Adaptive RAG** | Routes each query to the right tier - LLM direct, vector store, or web search |
 | **Corrective RAG** | Grades retrieved docs; rewrites the query and falls back if they're irrelevant |
 | **Self-RAG** | Checks the generated answer for hallucinations and usefulness; retries if needed |
-
-**Reference:** [LangGraph Agentic RAG Tutorial](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_agentic_rag/) — study it, don't copy it.
 
 
 ## Architecture
