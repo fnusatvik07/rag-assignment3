@@ -5,8 +5,6 @@
 > **Total Points:** 200 + 60 Bonus
 > **Framework:** Any (LangGraph, LlamaIndex, Haystack, Google Agent SDK, Claude sdk custom — your choice)
 
----
-
 ## Table of Contents
 
 1. [Background & Motivation](#1-background--motivation)
@@ -86,82 +84,18 @@ The image below (from the LangGraph tutorial) shows the baseline agentic RAG gra
 
 ### 3.1 Target Architecture: Full Agentic RAG Pipeline
 
-Below is the **complete target architecture** you must implement. Candidates are required to recreate this as a proper infrastructure diagram (see Bonus Section 6.5 for details).
+Below is the **target architecture** you must implement, generated using the [AWS Diagram MCP Server](https://awslabs.github.io/mcp/servers/aws-diagram-mcp-server). As a bonus, candidates are required to recreate or extend this using the same tool (see Bonus Section 6.5).
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      AGENTIC RAG PIPELINE                           │
-│                                                                     │
-│   User Query                                                        │
-│       │                                                             │
-│       ▼                                                             │
-│  ┌─────────────┐                                                    │
-│  │   ROUTER    │  ◄── Adaptive RAG Layer                           │
-│  │  (Classify) │                                                    │
-│  └──────┬──────┘                                                    │
-│         │                                                           │
-│    ┌────┴──────────────────┐                                        │
-│    │                       │                                        │
-│    ▼                       ▼                                        │
-│  [Simple /            [Complex /                                    │
-│  Factual]             Domain Q]                                     │
-│    │                       │                                        │
-│    ▼                       ▼                                        │
-│  Direct LLM         ┌──────────────┐                               │
-│  Response           │   RETRIEVE   │  ◄── Vector Store             │
-│    │                │  (Top-K docs)│      (FAISS / Chroma / etc.)  │
-│    │                └──────┬───────┘                               │
-│    │                       │                                        │
-│    │                       ▼                                        │
-│    │              ┌─────────────────┐                              │
-│    │              │  GRADE DOCS     │  ◄── Corrective RAG Layer    │
-│    │              │  (Relevance     │                               │
-│    │              │   Checker)      │                               │
-│    │              └────────┬────────┘                              │
-│    │                       │                                        │
-│    │            ┌──────────┴──────────┐                            │
-│    │            │                     │                             │
-│    │       [Relevant]           [Irrelevant]                       │
-│    │            │                     │                             │
-│    │            │                     ▼                             │
-│    │            │           ┌──────────────────┐                   │
-│    │            │           │  QUERY REWRITE   │                   │
-│    │            │           │  + Web Search /  │                   │
-│    │            │           │  LLM Fallback    │                   │
-│    │            │           └────────┬─────────┘                   │
-│    │            │                    │                              │
-│    │            └─────────┬──────────┘                             │
-│    │                      │                                        │
-│    │                      ▼                                        │
-│    │             ┌─────────────────┐                               │
-│    │             │    GENERATE     │  ◄── Self-RAG Layer           │
-│    │             │    ANSWER       │                               │
-│    │             └────────┬────────┘                               │
-│    │                      │                                        │
-│    │                      ▼                                        │
-│    │             ┌─────────────────┐                               │
-│    │             │  SELF-REFLECT   │                               │
-│    │             │  Is answer      │                               │
-│    │             │  grounded?      │                               │
-│    │             │  Useful?        │                               │
-│    │             └────────┬────────┘                               │
-│    │                      │                                        │
-│    │            ┌─────────┴──────────┐                            │
-│    │            │                    │                             │
-│    │       [Supported &         [Not grounded /                   │
-│    │        Useful]              Incomplete]                       │
-│    │            │                    │                             │
-│    │            │                    └──► Re-retrieve & Retry      │
-│    │            │                         (max 3 loops)            │
-│    └────────────┤                                                  │
-│                 ▼                                                  │
-│           Final Answer                                             │
-│         + Source Citations                                         │
-│         + Confidence Score                                         │
-└─────────────────────────────────────────────────────────────────────┘
-```
+![Agentic RAG Architecture](./diagrams/architecture.png)
 
-### 3.1 Node Descriptions
+**Colour legend:**
+- 🔴 Red border — Semantic Cache layer
+- 🔵 Blue border — Adaptive RAG / Query Router
+- 🟢 Green border — Corrective RAG (retrieval, grading, rewrite, fallback)
+- 🟡 Yellow border — Self-RAG (generation + reflection loops)
+- 🟣 Purple border — Direct LLM path (no retrieval)
+
+### 3.2 Node Descriptions
 
 | Node | Responsibility | RAG Type |
 |---|---|---|
