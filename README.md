@@ -25,7 +25,7 @@ Reference to study (not copy): [LangGraph Agentic RAG Tutorial](https://langchai
 
 **LangGraph baseline (extend this):**
 
-![LangGraph Baseline](./langgraph-hybrid-rag-tutorial.avif)
+![LangGraph Baseline](./diagrams/langgraph-hybrid-rag-tutorial.avif)
 
 
 ## Implementation Checklist

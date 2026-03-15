@@ -1,5 +1,2 @@
-diagrams/
-*.avif
-*.png
 node_modules/
 .env
