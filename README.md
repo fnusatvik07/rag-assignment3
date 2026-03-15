@@ -84,13 +84,7 @@ The image below (from the LangGraph tutorial) shows the baseline agentic RAG gra
 
 ### 3.1 Target Architecture: Full Agentic RAG Pipeline
 
-**AWS Services Diagram**
-
-![Agentic RAG Architecture — AWS](./diagrams/architecture_aws.png)
-
-**Flow Diagram**
-
-![Agentic RAG Architecture — Flow](./diagrams/architecture.png)
+![Agentic RAG Architecture](./diagrams/architecture_aws.png)
 
 **Colour legend:**
 - 🔴 Red — Semantic Cache layer
