@@ -182,14 +182,14 @@ function CheckItem({ item, index }) {
 /* ── DiagramViewer ─────────────────────────────────────────────────────── */
 const DIAGRAMS = [
   {
-    id: 0, title: 'Target Architecture', subtitle: 'What you need to build — AWS-style pipeline', src: '/architecture_aws.png',
+    id: 0, title: 'Target Architecture', subtitle: 'What you need to build — AWS-style pipeline', src: `${import.meta.env.BASE_URL}architecture_aws.png`,
     legend: [
       { color: '#ef4444', label: 'Cache' }, { color: '#3b82f6', label: 'Adaptive RAG' },
       { color: '#10b981', label: 'Corrective RAG' }, { color: '#f59e0b', label: 'Self-RAG' }, { color: '#a855f7', label: 'Direct LLM' },
     ],
     dark: true,
   },
-  { id: 1, title: 'LangGraph Baseline', subtitle: 'Reference graph from LangGraph tutorial — extend this', src: '/langgraph-baseline.avif', legend: null, dark: false },
+  { id: 1, title: 'LangGraph Baseline', subtitle: 'Reference graph from LangGraph tutorial — extend this', src: `${import.meta.env.BASE_URL}langgraph-baseline.avif`, legend: null, dark: false },
 ]
 
 function DiagramViewer() {
