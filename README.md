@@ -3,7 +3,27 @@
 > **Course:** RAG Architect 2026
 > **Submission Deadline:** March 22, 2026 — End of Day (11:59 PM)
 > **Total Points:** 200 + 60 Bonus
-> **Framework:** Any (LangGraph, LlamaIndex, Haystack, Google Agent SDK, Claude sdk custom — your choice)
+> **Framework:** Any (LangGraph, LlamaIndex, Haystack, Google Agent SDK, Claude SDK, custom — your choice)
+
+## What You Need to Implement
+
+**Core (required for all students):**
+- **Document Ingestion** — load ≥ 3 documents, chunk them, embed and store in a vector database
+- **Adaptive RAG Router** — classify each query into one of 3 tiers: direct LLM answer, vector store retrieval, or web search
+- **Corrective RAG — Document Grader** — score each retrieved chunk as relevant or irrelevant using a structured LLM call
+- **Corrective RAG — Query Rewriter** — when all docs are irrelevant, reformulate the query and retry retrieval
+- **Corrective RAG — Fallback** — if retry also fails, fall back to web search (Tavily / DuckDuckGo) or LLM parametric knowledge
+- **Self-RAG — Hallucination Grader** — after generating an answer, check whether it is grounded in the source documents
+- **Self-RAG — Answer Quality Grader** — check whether the answer actually addresses the question
+- **Graph / Pipeline Assembly** — connect all the above into a stateful agentic loop with max-retry guards (≤ 3 loops)
+- **End-to-End Demo** — working notebook or CLI demo covering all 3 pipeline branches with source citations in the output
+
+**Bonus (pick any):**
+- **Better Chunking** — semantic, hierarchical, proposition, or late chunking with ablation comparison
+- **Semantic Cache** — skip the pipeline on repeated similar queries using cosine similarity
+- **Pipeline Tiers** — extend the router to support a 3-tier system: Tier 0 (LLM only), Tier 1 (basic RAG), Tier 2 (multi-hop advanced RAG)
+- **Own Implementation** — build without LangGraph (custom state machine, multi-agent, streaming, etc.)
+- **Architecture Diagram** — recreate the system diagram using a professional tool (AWS icons, draw.io, Excalidraw)
 
 ## Table of Contents
 
@@ -93,50 +113,7 @@ The image below (from the LangGraph tutorial) shows the baseline agentic RAG gra
 - 🟡 Yellow — Self-RAG (generate + reflect)
 - 🟣 Purple — Direct LLM path (no retrieval)
 
-### 3.2 Flow Overview (Mermaid)
-
-```mermaid
-flowchart TD
-    U([User Query]) --> C{Semantic Cache}
-    C -->|HIT| OUT([Final Answer + Citations])
-    C -->|MISS| R{Adaptive Router}
-
-    R -->|simple / factual| LD[LLM Direct]
-    R -->|domain question| RET[Retrieve Top-K]
-    R -->|current events| WS[Web Search]
-
-    CORPUS[(Document Corpus)] -.->|index| VS[(Vector Store)]
-    VS -.-> RET
-
-    RET --> GD{Grade Docs}
-    GD -->|relevant| GEN[Generate Answer]
-    GD -->|irrelevant| RW[Query Rewriter]
-    RW -->|retry| RET
-    RW -->|max retries| FB[Fallback\nLLM / Web]
-    FB --> GEN
-    WS --> GEN
-
-    GEN --> HC{Hallucination\nGrader}
-    HC -->|grounded| QC{Answer Quality\nGrader}
-    HC -->|hallucinated| RET
-    QC -->|useful| OUT
-    QC -->|not useful| GEN
-
-    LD --> OUT
-
-    style C fill:#FADBD8,stroke:#E74C3C
-    style R fill:#D6EAF8,stroke:#2E86C1
-    style GD fill:#D5F5E3,stroke:#1E8449
-    style RW fill:#D5F5E3,stroke:#1E8449
-    style RET fill:#D5F5E3,stroke:#1E8449
-    style GEN fill:#FEF9E7,stroke:#B7950B
-    style HC fill:#FEF9E7,stroke:#B7950B
-    style QC fill:#FEF9E7,stroke:#B7950B
-    style LD fill:#F4ECF7,stroke:#7D3C98
-    style OUT fill:#EAEDED,stroke:#555
-```
-
-### 3.3 Node Descriptions
+### 3.2 Node Descriptions
 
 | Node | Responsibility | RAG Type |
 |---|---|---|
@@ -436,26 +413,6 @@ Recreate the system architecture as a **proper infrastructure/flow diagram**.
 - **Mermaid.js** diagram embedded in your README
 - **Excalidraw** exported as PNG/SVG
 - **Any other professional diagramming tool**
-
-**Minimum diagram content:**
-
-```mermaid
-graph TD
-    A[User Query] --> B{Adaptive Router}
-    B -->|Simple/Factual| C[LLM Direct Answer]
-    B -->|Domain Question| D[Vector Store Retrieve]
-    B -->|Current Events| E[Web Search]
-    D --> F{Grade Documents}
-    F -->|Relevant| G[Generate Answer]
-    F -->|Irrelevant| H[Rewrite Query]
-    H --> D
-    E --> G
-    G --> I{Self-Reflect}
-    I -->|Grounded + Useful| J[Final Answer + Citations]
-    I -->|Hallucinated| D
-    I -->|Not Useful| G
-    C --> J
-```
 
 **Deliverable:** Diagram image file (PNG/SVG) + source file committed to your repo.
 
