@@ -4,7 +4,6 @@
 
 Build a RAG system that thinks for itself — it decides whether to retrieve, checks if retrieved docs are useful, and reflects on its own answers before returning them.
 
----
 
 ## What to Build
 
@@ -18,7 +17,6 @@ You are implementing three techniques on top of a standard RAG pipeline:
 
 **Reference:** [LangGraph Agentic RAG Tutorial](https://langchain-ai.github.io/langgraph/tutorials/rag/langgraph_agentic_rag/) — study it, don't copy it.
 
----
 
 ## Architecture
 
@@ -30,7 +28,6 @@ You are implementing three techniques on top of a standard RAG pipeline:
 
 ![LangGraph Baseline](./langgraph-hybrid-rag-tutorial.avif)
 
----
 
 ## Implementation Checklist
 
@@ -58,7 +55,6 @@ You are implementing three techniques on top of a standard RAG pipeline:
 | Custom implementation (no LangGraph, multi-agent, streaming, etc.) | +15 |
 | Architecture diagram using a proper tool (draw.io, Excalidraw, AWS icons) | +15 |
 
----
 
 ## Grading
 
@@ -74,7 +70,6 @@ You are implementing three techniques on top of a standard RAG pipeline:
 | **Evaluation** (3+ test cases + metrics) | 30 |
 | **Total** | **200** |
 
----
 
 ## Submission
 
@@ -101,7 +96,6 @@ your-repo/
 
 **Late policy:** -10 pts per day. Extensions only for documented emergencies — email before the deadline.
 
----
 
 ## Resources
 
@@ -119,7 +113,6 @@ your-repo/
 
 **Tools:** LangGraph · LangChain · FAISS / Chroma · Tavily · RAGAS · GPT-4o / Claude / Gemini
 
----
 
 ## FAQ
 
